@@ -12,11 +12,13 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# Bucket S3 Principal
 resource "aws_s3_bucket" "secure_bucket" {
   bucket        = "devsecops-lab-secure-bucket-oscardug"
   force_destroy = true
 }
 
+# Habilitar Versionamiento
 resource "aws_s3_bucket_versioning" "versioning" {
   bucket = aws_s3_bucket.secure_bucket.id
   versioning_configuration {
@@ -24,6 +26,7 @@ resource "aws_s3_bucket_versioning" "versioning" {
   }
 }
 
+# Cifrado con KMS o AES256
 resource "aws_s3_bucket_server_side_encryption_configuration" "s3_encryption" {
   bucket = aws_s3_bucket.secure_bucket.id
   rule {
@@ -33,6 +36,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_encryption" {
   }
 }
 
+# Bloqueo Estricto de Acceso Público
 resource "aws_s3_bucket_public_access_block" "public_block" {
   bucket                  = aws_s3_bucket.secure_bucket.id
   block_public_acls       = true
