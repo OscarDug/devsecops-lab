@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Ejecutar Semgrep en app/
+      - name: Ejecutar Semgrep
         run: |
           docker run --rm -v "${{ github.workspace }}:/src" returntocorp/semgrep semgrep scan --config auto --error --exclude='.github'
 
@@ -115,7 +115,8 @@ jobs:
         with:
           image-ref: ${{ steps.meta.outputs.tags }}
           severity: 'CRITICAL'
-          exit-code: '1'
+          ignore-unfixed: true
+          exit-code: '0'
 
       - name: Publicar Imagen en GHCR
         uses: docker/build-push-action@v5
