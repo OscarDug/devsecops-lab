@@ -1,21 +1,21 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import sqlite3
 
 app = Flask(__name__)
 
-@app.route("/buscar")
+@app.route("/buscar", methods=["GET"])
 def buscar():
     termino = request.args.get("q", "")
-    conexion = sqlite3.connect("database.db")
-    # CORRECCIÓN SAST: Consulta parametrizada
-    consulta = "SELECT * FROM productos WHERE nombre = ?"
-    resultado = conexion.execute(consulta, (termino,))
-    return str(resultado.fetchall())
+    with sqlite3.connect("database.db") as conexion:
+        cursor = conexion.cursor()
+        consulta = "SELECT * FROM productos WHERE nombre = ?"
+        cursor.execute(consulta, (termino,))
+        resultado = cursor.fetchall()
+    return jsonify(resultado)
 
-@app.route("/evaluar")
+@app.route("/evaluar", methods=["GET"])
 def evaluar():
-    # CORRECCIÓN SAST: Desactivación de ejecución dinámica
-    return "Operación no permitida por políticas de seguridad", 400
+    return jsonify({"error": "Operación no permitida"}), 400
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8080)
+    app.run(host="127.0.0.1", port=8080, debug=False)
