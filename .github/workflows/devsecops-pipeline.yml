@@ -95,7 +95,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: type=sha
+          tags: type=sha,format=long
 
       - name: Compilar Imagen Docker Local
         uses: docker/build-push-action@v5
@@ -143,7 +143,6 @@ jobs:
       id-token: write
     env:
       REGISTRY: ghcr.io
-      COSIGN_EXPERIMENTAL: "1"
     steps:
       - name: Convertir nombre de repositorio a minúsculas
         run: |
