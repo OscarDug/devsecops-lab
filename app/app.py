@@ -24,5 +24,3 @@ def evaluar():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
-AWS_SECRET_KEY = "AKIAIOSFODNN7EXAMPLE"
-GITHUB_TOKEN="ghp_1234567890abcdefghijklmnopqrstuvwxyz"
