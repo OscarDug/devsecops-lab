@@ -70,6 +70,10 @@ jobs:
     name: 5. Build, Container Scan & SBOM
     needs: [sast, sca, iac-security]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     env:
       REGISTRY: ghcr.io
     steps:
@@ -133,8 +137,13 @@ jobs:
     name: 6. Firma de Artefacto (Cosign Keyless)
     needs: build-and-sbom
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     env:
       REGISTRY: ghcr.io
+      COSIGN_EXPERIMENTAL: "1"
     steps:
       - name: Convertir nombre de repositorio a minúsculas
         run: |
